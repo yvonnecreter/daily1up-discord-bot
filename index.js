@@ -27,7 +27,7 @@ const client = new Discord.Client({
   restTimeOffset: 0,
   restWsBridgetimeout: 100,
   disableEveryone: true,
-  partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILDS']
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILDS', 'USER', 'GUILDMEMBER']
 });
 
 
@@ -49,30 +49,49 @@ cron.schedule('* * * * *', () => {
 
 async function sendScheduledMessages() {
   const userData = JSON.parse(fs.readFileSync('./data/userdata.json'));
-  const quotes = JSON.parse(fs.readFileSync('./data/1up.json'));
+  const messageFiles = {
+    'Inspirational Quotes': './data/inspirational.json',
+    'Thoughtful Texts': './data/thoughtful.json',
+    'Positive Affirmations': './data/affirmations.json',
+    'Challenges': './data/challenges.json'
+  };
 
   for (const userId in userData) {
     const userTimezone = userData[userId].timezone;
     const scheduledTimes = userData[userId].times;
+    const messageType = userData[userId].messageType || 'Inspirational Quotes';
 
     if (scheduledTimes) {
       for (const scheduledTime of scheduledTimes) {
         const nowInUserTimezone = moment().tz(userTimezone);
 
-        // Check whether current time matches the scheduled time
+        //check for type of messages here:
+        const messageTypes = "...";
+
         if (nowInUserTimezone.format('HH:mm A') === scheduledTime) {
           const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+          let messageData = await getMessageData(messageFiles, messageTypes);
 
-          try {
-            const user = await client.users.fetch(userId);
-            await user.send(randomQuote);
-          } catch (error) {
-            console.error(`Error sending DM to ${userId}:`, error);
+          if (nowInUserTimezone.format('HH:mm A') === scheduledTime) {
+            const user = await client.users.fetch(userId); // Fetch user
+            let messageData = await getMessageData(messageFiles, messageType);
           }
+          await user.send(messageData);
         }
       }
     }
   }
+}
+
+async function getMessageData(messageFiles, userRoles) {
+  for (const role in messageFiles) {
+    if (userRoles.includes(role)) {
+      const messages = JSON.parse(fs.readFileSync(messageFiles[role]));
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      return messages[randomIndex];
+    }
+  }
+  return null;
 }
 
 //login into the bot
@@ -94,10 +113,28 @@ client.on(Discord.Events.InteractionCreate, async interaction => {
   } catch (error) {
     console.error(error);
     await interaction.reply("An error occured. Please contact staff: ERROR " + error)
-    // if (interaction.replied || interaction.deferred) {
-    //   await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
-    // } else {
-    //   await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-    // }
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+    } else {
+      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    }
   }
 });
+
+// client.on('guildCreate', async (guild) => {
+//   const rolesToCreate = [
+//     'Inspirational Quotes',
+//     'Thoughtful Texts',
+//     'Positive Affirmations',
+//     'Challenges'
+//   ];
+
+//   rolesToCreate.forEach(async (roleName) => {
+//     try {
+//       await guild.roles.create({ name: roleName });
+//       console.log(`Created role ${roleName}`);
+//     } catch (error) {
+//       console.error(`Error creating role ${roleName}:`, error);
+//     }
+//   });
+// });

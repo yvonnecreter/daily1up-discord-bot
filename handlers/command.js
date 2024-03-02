@@ -23,7 +23,6 @@ module.exports = async (client) => {
 
   //ACTIVATE ONCE PER COMMAND
   // registerCommands();
-  deleteCommand(client);
 }
 
 // Registering Commands only neccessary to initiate a new Command
