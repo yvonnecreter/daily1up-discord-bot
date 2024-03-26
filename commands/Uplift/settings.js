@@ -87,7 +87,8 @@ module.exports = {
 
 async function fetchUserData(userId) {
     const data = await fs.promises.readFile('./data/userdata.json');
-    const userData = JSON.parse(data)[userId].messageType;
+    let userData = [];
+    if (JSON.parse(data)[userId]) userData = JSON.parse(data)[userId].messageType;
     return userData || [];
 }
 
