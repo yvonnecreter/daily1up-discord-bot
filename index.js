@@ -56,27 +56,30 @@ async function sendScheduledMessages() {
     'Challenges': './data/challenges.json'
   };
 
+  // Going through all user entries
   for (const userId in userData) {
     const userTimezone = userData[userId].timezone;
     const scheduledTimes = userData[userId].times;
     const messageType = userData[userId].messageType || 'Inspirational Quotes';
 
     if (scheduledTimes) {
+      // Find matching reminders
       for (const scheduledTime of scheduledTimes) {
         const nowInUserTimezone = moment().tz(userTimezone);
-
-        //check for type of messages here:
-        const messageTypes = "...";
-
+        
         if (nowInUserTimezone.format('HH:mm A') === scheduledTime) {
           const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-          let messageData = await getMessageData(messageFiles, messageTypes);
-
-          if (nowInUserTimezone.format('HH:mm A') === scheduledTime) {
-            const user = await client.users.fetch(userId); // Fetch user
-            let messageData = await getMessageData(messageFiles, messageType);
-          }
+          const user = await client.users.fetch(userId);
+          let messageData = await getMessageData(messageFiles, messageType);
           await user.send(messageData);
+          // ------ ERROR CAUGHT HERE
+          // let messageData = await getMessageData(messageFiles, messageType);
+
+          // if (nowInUserTimezone.format('HH:mm A') === scheduledTime) {
+          //   const user = await client.users.fetch(userId); // Fetch user
+          //   let messageData = await getMessageData(messageFiles, messageType);
+          // }
+          // await user.send(messageData);
         }
       }
     }
@@ -94,7 +97,7 @@ async function getMessageData(messageFiles, userRoles) {
   return null;
 }
 
-//login into the bot
+//Login into the bot
 client.login(config.token);
 
 

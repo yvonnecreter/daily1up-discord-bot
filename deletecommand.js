@@ -34,7 +34,7 @@ const client = new Discord.Client({
 client.login(config.token);
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    // getCommands();
+    getCommands();
     deleteCommandByName('template');
     // deleteCommandById('1213443940796203080', 'template');
 });
