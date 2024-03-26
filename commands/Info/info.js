@@ -25,6 +25,7 @@ module.exports = {
                 .addFields(
                     { name: '🌍 Timezone', value: userInfo.timezone || 'Not set' },
                     { name: '⏰ Reminder Times', value: userInfo.times?.join('\n') || 'None' },
+                    { name: '💡 Uplift Type', value: userInfo.messageType?.join('\n') || 'None' },
                 )
                 .setFooter({ text: 'Spread positivity! 😊' });
             interaction.reply({ embeds: [embed] });

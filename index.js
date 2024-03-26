@@ -60,26 +60,22 @@ async function sendScheduledMessages() {
   for (const userId in userData) {
     const userTimezone = userData[userId].timezone;
     const scheduledTimes = userData[userId].times;
-    const messageType = userData[userId].messageType || 'Inspirational Quotes';
+    const messageTypes = userData[userId].messageType || ['Inspirational Quotes'];
+    // console.log("Scheduled: User-ID " + userId);
 
     if (scheduledTimes) {
       // Find matching reminders
       for (const scheduledTime of scheduledTimes) {
         const nowInUserTimezone = moment().tz(userTimezone);
-        
-        if (nowInUserTimezone.format('HH:mm A') === scheduledTime) {
-          const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-          const user = await client.users.fetch(userId);
-          let messageData = await getMessageData(messageFiles, messageType);
-          await user.send(messageData);
-          // ------ ERROR CAUGHT HERE
-          // let messageData = await getMessageData(messageFiles, messageType);
 
-          // if (nowInUserTimezone.format('HH:mm A') === scheduledTime) {
-          //   const user = await client.users.fetch(userId); // Fetch user
-          //   let messageData = await getMessageData(messageFiles, messageType);
-          // }
-          // await user.send(messageData);
+        for (const messageType of messageTypes) {
+          quotes = messageFiles[messageType];
+          if (nowInUserTimezone.format('HH:mm A') === scheduledTime) {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            const user = await client.users.fetch(userId);
+            let messageData = await getMessageData(messageFiles, messageType);
+            await user.send(messageData);
+          }
         }
       }
     }
