@@ -33,18 +33,18 @@ module.exports = {
                 });
 
                 const row = new ActionRowBuilder().addComponents(selectMenu);
-                interaction.reply({ content: '<@' + userId + '> ' + 'Select the time to remove:', components: [row] });
+                interaction.reply({ content: '<@' + userId + '> ' + 'Select the time to remove:', components: [row], ephemeral: true });
 
                 // Interaction Handler
                 client.on('interactionCreate', async interaction => {
                     if (!interaction.isStringSelectMenu()) return;
 
-                    if (interaction.user.id != userId) {
-                        await interaction.reply({
-                            content: `<@${interaction.user.id}> This message was not meant for you!`
-                        });
-                        return;
-                    }
+                    // if (interaction.user.id != userId) {
+                    //     await interaction.reply({
+                    //         content: `<@${interaction.user.id}> This message was not meant for you!`
+                    //     });
+                    //     return;
+                    // }
 
                     if (interaction.customId === 'removeTimeSelect') {
                         const selectedTime = interaction.values[0];
