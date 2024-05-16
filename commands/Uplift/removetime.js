@@ -36,7 +36,7 @@ module.exports = {
                 interaction.reply({ content: '<@' + userId + '> ' + 'Select the time to remove:', components: [row], ephemeral: true });
 
                 // Interaction Handler
-                client.on('interactionCreate', async interaction => {
+                client.once('interactionCreate', async interaction => {
                     if (!interaction.isStringSelectMenu()) return;
 
                     if (interaction.user.id != userId) {

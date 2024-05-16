@@ -24,8 +24,8 @@ module.exports = {
     async execute(interaction, client) {
         let userId = interaction.user.id;
         const selectedContinent = interaction.options.getString('continent');
-        console.log(selectedContinent)
-        console.log(allTimezones)
+        // console.log(selectedContinent)
+        // console.log(allTimezones)
 
         //Timezone Variables
         const timezoneGroups = {
@@ -47,6 +47,7 @@ module.exports = {
                 const endCode = range[1].charCodeAt(0);
 
                 if (firstLetter.charCodeAt(0) >= startCode && firstLetter.charCodeAt(0) <= endCode) {
+                    console.log(timezone)
                     timezoneGroups[group].push(timezone);
                     break;
                 }
@@ -56,6 +57,7 @@ module.exports = {
 
         //LESS THAN 25 OPTIONS
         if (filteredTimezones.length > 0 && filteredTimezones.length < 26) {
+            console.log("LESS THAN 25 OPTIONS")
 
             //Small Menu
             const smallSelectMenu = new StringSelectMenuBuilder()
@@ -106,6 +108,7 @@ module.exports = {
         } else if (filteredTimezones.length > 0) {
 
             // BIG MENU
+            console.log("MORE THAN 25 OPTIONS")
 
             // Letter Menu
             let letterRangeMenu = new StringSelectMenuBuilder()
