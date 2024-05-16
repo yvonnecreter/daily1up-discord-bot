@@ -1,0 +1,8 @@
+{
+    "appname": "Daily 1-Up",
+    "token": "BOTTOKEN",
+    "applicationid": "1176710335512723537",
+    "prefix": "!",
+    "defaultCommandCooldown": 1,
+    "registerCommands": false
+}
