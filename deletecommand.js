@@ -3,6 +3,7 @@ const Discord = require("discord.js"); //this is the official discord.js wrapper
 const colors = require("colors"); //this Package is used, to change the colors of our Console! (optional and doesnt effect performance)
 const fs = require("fs"); //this package is for reading files and getting their inputs
 const config = require("./botconfig/config.json");
+const delConfig = require("./botconfig/delete.json");
 const ee = require("./botconfig/embed.json");
 const moment = require('moment-timezone');
 const cron = require('node-cron');
@@ -35,7 +36,7 @@ client.login(config.token);
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     getCommands();
-    deleteCommandByName('template');
+    deleteCommandByName(delConfig.commandname);
     // deleteCommandById('1213443940796203080', 'template');
 });
 

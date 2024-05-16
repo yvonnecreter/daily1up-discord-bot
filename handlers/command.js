@@ -22,7 +22,7 @@ module.exports = async (client) => {
   });
 
   //ACTIVATE ONCE PER COMMAND
-  registerCommands();
+  if (config.registerCommands) registerCommands();
 }
 
 // Registering Commands only neccessary to initiate a new Command
